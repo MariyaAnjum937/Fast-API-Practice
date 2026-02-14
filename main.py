@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, ConfigDict
 app = FastAPI()
 
@@ -8,12 +9,16 @@ class Student(BaseModel):
     branch: str
     model_config = ConfigDict(extra="forbid")
 students = []
+@app.get("/",response_class=HTMLResponse)
+def home():
+    return f"<h1>hello</h1>"
 @app.post("/students")
 def add_student(student: Student):
     students.append(student)
     return {"message":"student added successfully!"}
 
-@app.get("/students")
+
+@app.get("/students", response_class=HTMLResponse)
 def get_students():
     return students
 
